@@ -67,4 +67,15 @@ TodoController.patch('/:id', async (request: Request, response: Response) => {
   }
 });
 
+TodoController.post("/responsibles/:id", async (request: Request, response: Response) => {
+  try {
+    const users: Object[] = request.body.users;
+    const id: Object = request.params.id;
+    const serviceResult = await TodoService.addResponsibleUsers(id, users);
+    response.send({ status: "ok", result: serviceResult });
+  } catch (error) {
+    response.status(500).send({ status: "failed", result: error });
+  }
+});
+
 export default TodoController;

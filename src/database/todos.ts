@@ -21,10 +21,13 @@ const TodoSchema = new Schema(
       type: String,
       enum: ['CREATED', 'EXECUTE', 'FINISHED'],
     },
+    responsibleUsers: {
+      type: [mongoose.Types.ObjectId],
+    },
     isDeleted: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   {
     collection: 'todos',
