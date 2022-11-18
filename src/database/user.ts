@@ -1,10 +1,11 @@
 // crear un esquema de usuarios
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
+
 const UserSchema = new Schema(
     {
-        names:{
+        names: {
             type: String,
             required: true,
         },
@@ -12,25 +13,24 @@ const UserSchema = new Schema(
             type: String,
             required: true,
         },
-        email:{
+        email: {
             type: String,
             required: true,
-            index:{
-                unique: true
-            }
+            index: {
+                unique: true,
+            },
         },
         password: {
             type: String,
             required: true,
-        }
+        },
     },
     {
-        collection: "users",
+        collection: 'users',
         versionKey: false,
-      }
+    }
 );
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 export default User;
-

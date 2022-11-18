@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import ITodo from "../models/ITodo";
+import ITodo, { ETodoStatus } from "../models/ITodo";
 import TodoService from "../services/TodoService";
 
 const TodoController: Router = Router();
@@ -25,45 +25,45 @@ TodoController.get("/", async (request: Request, response: Response) => {
 
 // crear las rutas para eliminar, actualizar, cambiar estado de una tarea y buscar por un id
 
-TodoController.get('/:id', async(request:Request, response:Response) => {
+TodoController.get('/:id', async (request: Request, response: Response) => {
   try {
-      const id: Object = request.params.id;
-      const serviceResult = await TodoService.findTodoById(id);
-      response.send({ status: 'ok', result: serviceResult });
+    const id: Object = request.params.id;
+    const serviceResult = await TodoService.findTodoById(id);
+    response.send({ status: 'ok', result: serviceResult });
   } catch (error) {
-      response.status(500).send({ status: 'Failed', result: error});
+    response.status(500).send({ status: 'Failed', result: error });
   }
 });
 
-TodoController.delete('/:id', async(request:Request, response:Response) => {
+TodoController.delete('/:id', async (request: Request, response: Response) => {
   try {
-      const id: Object = request.params.id;
-      const serviceResult = await TodoService.deleteTodo(id);
-      response.send({ status: 'ok', result: serviceResult });
+    const id: Object = request.params.id;
+    const serviceResult = await TodoService.deleteTodo(id);
+    response.send({ status: 'ok', result: serviceResult });
   } catch (error) {
-      response.status(500).send({status:  'Failed', result: error});
+    response.status(500).send({ status: 'Failed', result: error });
   }
 })
 
-TodoController.put('/:id', async (request:Request, response:Response) => {
+TodoController.put('/:id', async (request: Request, response: Response) => {
   try {
-      const id: Object = request.params.id;
-      const todo: ITodo = request.body;
-      const serviceResult = await TodoService.editTodo(id, todo);
-      response.send({ status: 'ok', result: serviceResult })
+    const id: Object = request.params.id;
+    const todo: ITodo = request.body;
+    const serviceResult = await TodoService.editTodo(id, todo);
+    response.send({ status: 'ok', result: serviceResult })
   } catch (error) {
-      response.status(500).send({status:  'Failed', result: error});
+    response.status(500).send({ status: 'Failed', result: error });
   }
 });
 
-TodoController.put('/:id', async (request:Request, response:Response) => {
+TodoController.patch('/:id', async (request: Request, response: Response) => {
   try {
-      const id: Object = request.params.id;
-      const todo: ITodo = request.body;
-      const serviceResult = await TodoService.updateStatus(id, todo);
-      response.send({ status: 'ok', result: serviceResult })
+    const id: Object = request.params.id;
+    const status: ETodoStatus = ETodoStatus[request.query.status as ETodoStatus];
+    const serviceResult = await TodoService.updateStatus(id, status);
+    response.send({ status: 'ok', result: serviceResult })
   } catch (error) {
-      response.status(500).send({status:  'Failed', result: error});
+    response.status(500).send({ status: 'Failed', result: error });
   }
 });
 

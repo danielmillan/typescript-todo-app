@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -19,15 +19,19 @@ const TodoSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["CREATED", "EXECUTE", "FINISHED"],
+      enum: ['CREATED', 'EXECUTE', 'FINISHED'],
     },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    }
   },
   {
-    collection: "todos",
+    collection: 'todos',
     versionKey: false,
   }
 );
 
-const Todo = mongoose.model("Todo", TodoSchema);
+const Todo = mongoose.model('Todo', TodoSchema);
 
 export default Todo;
