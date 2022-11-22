@@ -1,3 +1,4 @@
+import Role from "../database/roles";
 import User from "../database/user";
 import IUser from "../models/IUser";
 
@@ -16,7 +17,38 @@ export default class UserService {
   public static getUsers(): Promise<IUser[]> {
     return new Promise(async (resolve, reject) => {
       try {
-        const listUsers = await User.find({ isDeleted: false });
+        const listUsers = await User.aggregate([
+          {
+            $match: {
+              isDeleted: false,
+            },
+          },
+          {
+            $lookup: {
+              from: 'roles',
+              localField: 'role',
+              foreignField: '_id',
+              as: 'role'
+            }
+          },
+          {
+            $project:{
+              _id: 1,
+              names: 1,
+              lastName: 1,
+              email: 1,
+              password: 1,
+              isDeleted: 1,
+              role:{
+                _id:1,
+                name: 1,
+                permisions: 1,
+                isDeleted: 1
+              }
+              
+            }
+          }
+        ])
         resolve(listUsers);
       } catch (error: any) {
         reject(error);
@@ -58,5 +90,18 @@ export default class UserService {
         reject(error);
       }
     })
+  }
+
+  //AddRole
+  public static addRole( userId: Object, roleId: Object): Promise<string> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await Role.updateOne({ _id: userId }, { role: roleId });
+        //console.log(userId, roleId);
+        resolve(`Role ${roleId} agregado correctamente al usuario ${userId}`);
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 }

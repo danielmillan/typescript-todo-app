@@ -17,6 +17,7 @@ TodoController.post("/", async (request: Request, response: Response) => {
 TodoController.get("/", async (request: Request, response: Response) => {
   try {
     const serviceResult = await TodoService.getTodos();
+    console.log(serviceResult);
     response.send({ status: "ok", result: serviceResult });
   } catch (error) {
     response.status(500).send({ status: "failed", result: error });

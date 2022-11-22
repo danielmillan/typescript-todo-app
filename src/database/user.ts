@@ -24,10 +24,14 @@ const UserSchema = new Schema(
             type: String,
             required: true,
         },
+        role: {
+            type: mongoose.Types.ObjectId, //No se envia rreglo pues solo es posible tener un role
+        },
         isDeleted: {
             type: Boolean,
             default: false
-        }
+        },
+        
     },
     {
         collection: 'users',

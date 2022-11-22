@@ -1,4 +1,6 @@
 import { Router, Request, Response } from "express";
+import { ObjectId } from "mongoose";
+import { CLIENT_RENEG_LIMIT } from "tls";
 import IUser from "../models/IUser";
 import UserService from "../services/UserService";
 
@@ -51,6 +53,17 @@ UserController.put('/:id', async (request: Request, response: Response) => {
     response.send({ status: 'ok', result: serviceResult })
   } catch (error) {
     response.status(500).send({ status: 'Failed', result: error });
+  }
+});
+
+UserController.post("/addrole", async (request: Request, response: Response) => {
+  try {
+    const userId: Object = request.query.userId!;
+    const roleId: Object = request.query.roleId!;
+    const serviceResult = await UserService.addRole(userId, roleId);
+    response.send({ status: "ok", result: serviceResult });
+  } catch (error) {
+    response.status(500).send({ status: "failed", result: error });
   }
 });
 

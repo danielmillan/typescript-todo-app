@@ -3,6 +3,8 @@ import MongoService from "./services/MongoService";
 // Controllers
 import TodoController from "./controllers/TodoController";
 import UserController from "./controllers/UserController";
+import RoleController from "./controllers/RoleController";
+import authController from "./controllers/authController";
 
 const app = express();
 
@@ -11,6 +13,8 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/todo", TodoController);
 app.use("/user", UserController);
+app.use("/role", RoleController);
+app.use("/auth", authController);
 
 // Start database
 MongoService.connect();
