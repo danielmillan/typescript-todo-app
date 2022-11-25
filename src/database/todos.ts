@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import { ETodoStatus } from '../models/ITodo';
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -19,15 +20,22 @@ const TodoSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["CREATED", "EXECUTE", "FINISHED"],
+      enum: Object.values(ETodoStatus),
+    },
+    responsibleUsers: {
+      type: [mongoose.Types.ObjectId],
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
-    collection: "todos",
+    collection: 'todos',
     versionKey: false,
   }
 );
 
-const Todo = mongoose.model("Todo", TodoSchema);
+const Todo = mongoose.model('Todo', TodoSchema);
 
 export default Todo;
