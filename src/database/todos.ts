@@ -1,3 +1,4 @@
+import { ETodoStatus } from '../models/ITodo';
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
@@ -19,7 +20,7 @@ const TodoSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ['CREATED', 'EXECUTE', 'FINISHED'],
+      enum: Object.values(ETodoStatus),
     },
     responsibleUsers: {
       type: [mongoose.Types.ObjectId],

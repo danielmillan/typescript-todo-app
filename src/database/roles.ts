@@ -1,20 +1,21 @@
 //Esquema para Roles
+import { ERolePermisions } from '../models/IRole';
 import mongoose from 'mongoose';
 
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const RoleSchema = new Schema(
     {
         name: {
             type: String,
-            reuqired: true,
+            required: true,
         },
         permisions: {
-            type: Array,
-            //enum: ['CREATE', 'EDIT', 'DELETE', 'SEARCH'],
-            //default: 'SEARCH',
-            },
-        isDeleted:{
+            type: [String],
+            enum: Object.values(ERolePermisions),
+            required: true
+        },
+        isDeleted: {
             type: Boolean,
             default: false,
         }

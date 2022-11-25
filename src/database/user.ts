@@ -1,5 +1,5 @@
 // crear un esquema de usuarios
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
@@ -23,15 +23,16 @@ const UserSchema = new Schema(
         password: {
             type: String,
             required: true,
+            select: false
         },
         role: {
-            type: mongoose.Types.ObjectId, //No se envia rreglo pues solo es posible tener un role
+            type: mongoose.ObjectId,
+            required: true
         },
         isDeleted: {
             type: Boolean,
             default: false
         },
-        
     },
     {
         collection: 'users',

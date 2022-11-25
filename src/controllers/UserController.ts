@@ -1,6 +1,4 @@
 import { Router, Request, Response } from "express";
-import { ObjectId } from "mongoose";
-import { CLIENT_RENEG_LIMIT } from "tls";
 import IUser from "../models/IUser";
 import UserService from "../services/UserService";
 

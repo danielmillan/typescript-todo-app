@@ -1,17 +1,22 @@
-import { Router, Request, Response } from "express";
-import authService from "../services/authService";
+import { Router, Request, Response } from 'express';
+import IAuthentication from '../models/IAuthentication';
+import authService from '../services/authService';
 
 const authController: Router = Router();
 
-authController.post('/', async(request: Request, response: Response) =>{
+authController.post('/', async (request: Request, response: Response) => {
     try {
-        const email = request.body.email;
-        const password = String(request.body.password);
-        const resultService = await authService.authenticateUser(email, password);
-        response.send(resultService);
-    } catch (error) {
-        response.status(500).send({ status: "failed", result: error });
+        const credentials: IAuthentication = request.body;
+        const resultService = await authService.authenticateUser(credentials);
+        response.send({ status: 'ok', result: resultService });
+    } catch (error: any) {
+        response
+            .status(error.status ? error.status : 500)
+            .send({
+                status: 'failed',
+                result: error.message ? error.message : error,
+            });
     }
-})
+});
 
 export default authController;

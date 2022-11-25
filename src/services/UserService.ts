@@ -1,4 +1,4 @@
-import Role from "../database/roles";
+import bcrypt from "bcrypt";
 import User from "../database/user";
 import IUser from "../models/IUser";
 
@@ -6,6 +6,7 @@ export default class UserService {
   public static createUser(user: IUser): Promise<string> {
     return new Promise(async (resolve, reject) => {
       try {
+        user.password = bcrypt.hashSync(user.password, 10);
         await User.create(user);
         resolve("Usuario creado correctamente");
       } catch (error: any) {
@@ -28,24 +29,22 @@ export default class UserService {
               from: 'roles',
               localField: 'role',
               foreignField: '_id',
-              as: 'role'
+              as: 'roleMatch'
             }
           },
           {
-            $project:{
+            $unwind: "$roleMatch"
+          },
+          {
+            $project: {
               _id: 1,
               names: 1,
               lastName: 1,
               email: 1,
-              password: 1,
+              role: 1,
+              roleName: "$roleMatch.name",
+              permisions: "$roleMatch.permisions",
               isDeleted: 1,
-              role:{
-                _id:1,
-                name: 1,
-                permisions: 1,
-                isDeleted: 1
-              }
-              
             }
           }
         ])
@@ -60,7 +59,7 @@ export default class UserService {
   public static findUserById(id: Object): Promise<IUser | null> {
     return new Promise(async (resolve, reject) => {
       try {
-        const UserById = await User.findById({ _id: id }, { isDeleted: false }).lean();
+        const UserById = await User.findOne({ _id: id }, { isDeleted: false });
         resolve(UserById);
       } catch (error: any) {
         reject(error);
@@ -93,11 +92,10 @@ export default class UserService {
   }
 
   //AddRole
-  public static addRole( userId: Object, roleId: Object): Promise<string> {
+  public static addRole(userId: Object, roleId: Object): Promise<string> {
     return new Promise(async (resolve, reject) => {
       try {
-        await Role.updateOne({ _id: userId }, { role: roleId });
-        //console.log(userId, roleId);
+        await User.updateOne({ _id: userId }, { role: roleId });
         resolve(`Role ${roleId} agregado correctamente al usuario ${userId}`);
       } catch (error) {
         reject(error);
