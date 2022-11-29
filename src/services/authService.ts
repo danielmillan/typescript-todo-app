@@ -39,7 +39,7 @@ export default class authService {
                     }
                 ]);
                 if (
-                    userMatch &&
+                    userMatch &&                     
                     bcrypt.compareSync(credentials.password, userMatch[0].password)
                 ) {
                     delete userMatch[0].password;

@@ -12,9 +12,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/todo", TodoController);
+app.use("/todo", [SessionMiddleware.validateRouteAuthentication], TodoController);
 app.use("/user", [SessionMiddleware.validateRouteAuthentication], UserController);
-app.use("/role", RoleController);
+app.use("/role", [SessionMiddleware.validateRouteAuthentication], RoleController);
 app.use("/auth", authController);
 
 // Start database

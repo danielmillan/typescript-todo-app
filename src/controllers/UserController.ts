@@ -1,10 +1,11 @@
 import { Router, Request, Response } from "express";
+import PermisionsMiddleware from "../middlewares/permisions";
 import IUser from "../models/IUser";
 import UserService from "../services/UserService";
 
 const UserController: Router = Router();
 
-UserController.post("/", async (request: Request, response: Response) => {
+UserController.post("/", [PermisionsMiddleware.validateCreatePermisions], async (request: Request, response: Response) => {
   try {
     const user: IUser = request.body;
     const serviceResult = await UserService.createUser(user);
@@ -14,7 +15,7 @@ UserController.post("/", async (request: Request, response: Response) => {
   }
 });
 
-UserController.get("/", async (request: Request, response: Response) => {
+UserController.get("/", [PermisionsMiddleware.validateSearchPermisions], async (request: Request, response: Response) => {
   try {
     const serviceResult = await UserService.getUsers();
     response.send({ status: "ok", result: serviceResult });
@@ -23,7 +24,7 @@ UserController.get("/", async (request: Request, response: Response) => {
   }
 });
 
-UserController.get('/:id', async (request: Request, response: Response) => {
+UserController.get('/:id', [PermisionsMiddleware.validateSearchPermisions], async (request: Request, response: Response) => {
   try {
     const id: Object = request.params.id;
     const serviceResult = await UserService.findUserById(id);
@@ -33,7 +34,7 @@ UserController.get('/:id', async (request: Request, response: Response) => {
   }
 });
 
-UserController.delete('/:id', async (request: Request, response: Response) => {
+UserController.delete('/:id', [PermisionsMiddleware.validateDeletePermisions], async (request: Request, response: Response) => {
   try {
     const id: Object = request.params.id;
     const serviceResult = await UserService.deleteUser(id);
@@ -43,7 +44,7 @@ UserController.delete('/:id', async (request: Request, response: Response) => {
   }
 })
 
-UserController.put('/:id', async (request: Request, response: Response) => {
+UserController.put('/:id', [PermisionsMiddleware.validateEditPermisions], async (request: Request, response: Response) => {
   try {
     const id: Object = request.params.id;
     const user: IUser = request.body;
@@ -54,7 +55,7 @@ UserController.put('/:id', async (request: Request, response: Response) => {
   }
 });
 
-UserController.post("/addrole", async (request: Request, response: Response) => {
+UserController.post("/addrole", [PermisionsMiddleware.validateCreatePermisions], async (request: Request, response: Response) => {
   try {
     const userId: Object = request.query.userId!;
     const roleId: Object = request.query.roleId!;

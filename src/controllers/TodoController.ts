@@ -1,10 +1,11 @@
 import { Router, Request, Response } from "express";
+import PermisionsMiddleware from "../middlewares/permisions";
 import ITodo, { ETodoStatus } from "../models/ITodo";
 import TodoService from "../services/TodoService";
 
 const TodoController: Router = Router();
 
-TodoController.post("/", async (request: Request, response: Response) => {
+TodoController.post("/", [PermisionsMiddleware.validateCreatePermisions], async (request: Request, response: Response) => {
   try {
     const todo: ITodo = request.body;
     const serviceResult = await TodoService.createTodo(todo);
@@ -14,7 +15,7 @@ TodoController.post("/", async (request: Request, response: Response) => {
   }
 });
 
-TodoController.get("/", async (request: Request, response: Response) => {
+TodoController.get("/", [PermisionsMiddleware.validateSearchPermisions], async (request: Request, response: Response) => {
   try {
     const serviceResult = await TodoService.getTodos();
     console.log(serviceResult);
@@ -26,7 +27,7 @@ TodoController.get("/", async (request: Request, response: Response) => {
 
 // crear las rutas para eliminar, actualizar, cambiar estado de una tarea y buscar por un id
 
-TodoController.get('/:id', async (request: Request, response: Response) => {
+TodoController.get('/:id', [PermisionsMiddleware.validateSearchPermisions], async (request: Request, response: Response) => {
   try {
     const id: Object = request.params.id;
     const serviceResult = await TodoService.findTodoById(id);
@@ -36,7 +37,7 @@ TodoController.get('/:id', async (request: Request, response: Response) => {
   }
 });
 
-TodoController.delete('/:id', async (request: Request, response: Response) => {
+TodoController.delete('/:id', [PermisionsMiddleware.validateDeletePermisions], async (request: Request, response: Response) => {
   try {
     const id: Object = request.params.id;
     const serviceResult = await TodoService.deleteTodo(id);
@@ -46,7 +47,7 @@ TodoController.delete('/:id', async (request: Request, response: Response) => {
   }
 })
 
-TodoController.put('/:id', async (request: Request, response: Response) => {
+TodoController.put('/:id', [PermisionsMiddleware.validateEditPermisions], async (request: Request, response: Response) => {
   try {
     const id: Object = request.params.id;
     const todo: ITodo = request.body;
@@ -57,7 +58,7 @@ TodoController.put('/:id', async (request: Request, response: Response) => {
   }
 });
 
-TodoController.patch('/:id', async (request: Request, response: Response) => {
+TodoController.patch('/:id',  [PermisionsMiddleware.validateEditPermisions], async (request: Request, response: Response) => {
   try {
     const id: Object = request.params.id;
     const status: ETodoStatus = ETodoStatus[request.query.status as ETodoStatus];
@@ -68,7 +69,7 @@ TodoController.patch('/:id', async (request: Request, response: Response) => {
   }
 });
 
-TodoController.post("/responsibles/:id", async (request: Request, response: Response) => {
+TodoController.post("/responsibles/:id", [PermisionsMiddleware.validateCreatePermisions], async (request: Request, response: Response) => {
   try {
     const users: Object[] = request.body.users;
     const id: Object = request.params.id;

@@ -13,13 +13,15 @@ export default class SessionMiddleware {
                         _id: user!._id,
                         email: user!.email,
                         role: user!.role,
+                        permisions: user!.permisions,
                     };
+                    //console.log(response.locals.user);
                     nextFunction();
                 } else {
                     response.status(401).send({ status: 'failed', result: 'Sesion no es valida' });
                 }
             } else {
-                response.status(401).send({ status: 'failed', result: 'No tiene acceso a este recurso' });
+                response.status(401).send({ status: 'failed', result: 'No tiene acceso a este recurso.' });
             }
         } catch (error) {
             response.status(500).send({ status: 'failed', result: error });
