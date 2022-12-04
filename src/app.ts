@@ -11,6 +11,10 @@ import authController from './controllers/authController';
 
 const app = express();
 
+var options = {
+  explorer: true
+};
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -31,7 +35,7 @@ app.use(
 );
 app.use('/auth', authController);
 
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 // Start database
 MongoService.connect();
