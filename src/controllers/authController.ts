@@ -8,12 +8,12 @@ authController.post('/', async (request: Request, response: Response) => {
     try {
         const credentials: IAuthentication = request.body;
         const resultService = await authService.authenticateUser(credentials);
-        response.send({ status: 'ok', result: resultService });
+        response.send({ status: 'Ok', result: resultService });
     } catch (error: any) {
         response
             .status(error.status ? error.status : 500)
             .send({
-                status: 'failed',
+                status: 'Failed',
                 result: error.message ? error.message : error,
             });
     }

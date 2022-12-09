@@ -83,6 +83,7 @@ export default class UserService {
   public static editUser(id: Object, user: IUser): Promise<string> {
     return new Promise(async (resolve, reject) => {
       try {
+        user.password = bcrypt.hashSync(user.password, 10);
         await User.updateOne({ _id: id }, user);
         resolve('Usuario actualizada correctamente.');
       } catch (error) {

@@ -1,0 +1,692 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Todo API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9000"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "description": "Metodo para autenticacion",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "description": "*Authentication*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "email": "mail@mail.com",
+                "password": "CalleFalsa123"
+              }
+            },
+            "description": "Campos requeridos:\n * `email:` - email del usuario a autenticar\n * `password:` - contraseña del usuario\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Credenciales incorrectas"
+          },
+          "500": {
+            "description": "Error del sistema"
+          }
+        }
+      }
+    },
+    "/role": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Metodo para listar Roles",
+        "tags": ["Role"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "Metodo para crear un nuevo Role",
+        "tags": ["Role"],
+        "requestBody": {
+          "description": "*Crear Role*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "permisions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["CREATE", "EDIT", "SEARCH", "DELETE"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "permisions": {
+                  "type": "array"
+                }
+              },
+              "example": {
+                "name": "RoleName",
+                "permisions": ["CREATE", "EDIT", "SEARCH", "DELETE"]
+              }
+            },
+            "description": "Campos requeridos:\n * `name:` - Nombre del Role\n * `permisions:` - Puede ser CREATE, EDIT, DELETE, SEARCH\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/role/{id}": {
+      "put": {
+        "description": "",
+        "tags": ["Role"],
+        "requestBody": {
+          "description": "*Editar Role*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "permisions": {
+                    "type": "array"
+                  }
+                },
+                "example": {
+                  "name": "RoleName",
+                  "permisions": ["CREATE", "EDIT", "SEARCH", "DELETE"]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "tags": ["Role"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "description": "Metodo para listar usuarios",
+        "tags": ["User"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "Metodo para crear un nuevo Usuario",
+        "tags": ["User"],
+        "requestBody": {
+          "description": "*Crear Usuario*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "names": "Carlos",
+                "lastName": "Castro",
+                "email": "carlos@mail.com",
+                "password": "Colombia2022",
+                "role": "637b87713bc4d20cdc4ee327"
+              }
+            },
+            "description": "Campos requeridos:\n * `name:` - Nombre del usuario\n * `lastName:` - apellido del usuario\n * `email:` - correo electronico\n * `password:` - contraseña\n * `role:` - id del role a asignar\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "put": {
+        "description": "",
+        "tags": ["User"],
+        "requestBody": {
+          "description": "*Editar Usuario*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "names": "Carlos",
+                "lastName": "Castro",
+                "email": "carlos@mail.com",
+                "password": "Colombia2022",
+                "role": "637b87713bc4d20cdc4ee327"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "description": "Eliminar un suario",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      }
+    },
+    "/user/addrole": {
+      "post": {
+        "description": "",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "roleId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      }
+    },
+    "/todo": {
+      "get": {
+        "description": "Metodo para listar tareas",
+        "tags": ["todo"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      },
+      "post": {
+        "description": "Metodo para crear una tarea nueva",
+        "tags": ["todo"],
+        "requestBody": {
+          "description": "*Crear tarea*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": ["CREATED", "EXECUTE", "FINISHED"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "title": "tarea numero uno",
+                "description": "limpiar casa",
+                "status": "carlos@mail.com"
+              }
+            },
+            "description": "Campos requeridos:\n * `title:` - titulo de la tarea\n * `description:` - descripcion de la tarea\n * `status:` - estado de la tarea\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      }
+    },
+    "/todo/{id}": {
+      "put": {
+        "description": "Editar tarea",
+        "tags": ["todo"],
+        "requestBody": {
+          "description": "*Editar tarea*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "description": "Campos requeridos:\n * `name:` - Nombre del Role\n * `permisions:` - Puede ser CREATE, EDIT, DELETE, SEARCH\n"
+              },
+
+              "example": {
+                "title": "task name",
+                "description": "task description",
+                "status": "task status"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      },
+      "delete": {
+        "description": "Eliminar tarea",
+        "tags": ["todo"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      },
+      "get": {
+        "description": "Buscar tarea por id",
+        "tags": ["todo"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      },
+      "patch": {
+        "description": "",
+        "tags": ["todo"],
+        "requestBody": {
+          "description": "*Editar estado de la tarea*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": ["CREATED", "EXECUTE", "FINISHED"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      }
+    },
+    "/todo/responsibles/{id}": {
+      "post": {
+        "description": "",
+        "tags": ["todo"],
+        "requestBody": {
+          "description": "*Agregar responsable a la tarea*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "responsibleUsers": {
+                    "type": "array"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "No tiene acceso a este recurso"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
