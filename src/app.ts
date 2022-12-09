@@ -1,16 +1,41 @@
-import express from "express";
-import MongoService from "./services/MongoService";
+import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from "./oas.json";
+import MongoService from './services/MongoService';
+import SessionMiddleware from './middlewares/session';
 // Controllers
-import TodoController from "./controllers/TodoController";
-import UserController from "./controllers/UserController";
+import TodoController from './controllers/TodoController';
+import UserController from './controllers/UserController';
+import RoleController from './controllers/RoleController';
+import authController from './controllers/authController';
 
 const app = express();
+
+var options = {
+  explorer: true
+};
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/todo", TodoController);
-app.use("/user", UserController);
+app.use(
+  '/todo',
+  [SessionMiddleware.validateRouteAuthentication],
+  TodoController
+);
+app.use(
+  '/user',
+  [SessionMiddleware.validateRouteAuthentication],
+  UserController
+);
+app.use(
+  '/role',
+  [SessionMiddleware.validateRouteAuthentication],
+  RoleController
+);
+app.use('/auth', authController);
+
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 // Start database
 MongoService.connect();

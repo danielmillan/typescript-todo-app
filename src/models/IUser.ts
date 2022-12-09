@@ -6,5 +6,6 @@ export default interface IUser {
     lastName: string;
     email: string;
     password: string;
+    role: mongoose.Types.ObjectId;
     isDeleted: Boolean;
 }

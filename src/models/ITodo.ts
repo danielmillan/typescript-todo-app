@@ -5,7 +5,7 @@ export default interface ITodo {
   title: string;
   description: string;
   date?: Date;
-  status?: "CREATED" | "EXECUTE" | "FINISHED" | undefined;
+  status?: string;
 }
 
 export enum ETodoStatus {
